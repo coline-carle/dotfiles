@@ -31,7 +31,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'neomake/neomake'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'elixir-lang/vim-elixir'
 Plug 'tpope/vim-endwise'
 Plug 'slashmili/alchemist.vim'
@@ -39,8 +38,50 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ervandew/supertab'
 Plug 'sheerun/vim-polyglot'
+Plug 'benmills/vimux'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ntpeters/vim-better-whitespace'
 
 call plug#end()
+
+" STRIP whitespace
+autocmd BufEnter * EnableStripWhitespaceOnSave
+let c_space_error=1
+let elixir_space_error=1
+
+" set clipboard
+set clipboard=unnamed
+
+
+
+" NERDTree configuration
+let NERDTreeDirArrows=1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeWinSize = 50
+
+" Nerd tree
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <silent><leader>f :NERDTreeFind<cr>
+
+
+let g:rg_command = '
+  \ rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" '
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   g:rg_command .shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+nnoremap <C-p> :Rg<CR>
+
+noremap <leader>rr :wa<CR> :VimuxRunLastCommand<CR>
+noremap <leader>rc :wa<CR> :VimuxPromptCommand<CR>
 
 " Neomake
 let g:neomake_warning_sign={'text': 'W', 'texthl': 'WarningMsg'}
@@ -52,18 +93,6 @@ let g:neomake_info_sign = {'text': 'ℹ', 'texthl': 'InfoMsg'}
 let g:ctrlp_working_path_mode = 'ra'
 
 "
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-endif
-
 set encoding=utf-8
 set hlsearch
 set incsearch
@@ -117,7 +146,7 @@ set shiftround
 set expandtab
 
 " Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
+set list listchars=tab:»·,trail:·,nbsp:¬
 
 " Use one space, not two, after punctuation.
 set nojoinspaces

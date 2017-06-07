@@ -1,0 +1,24 @@
+session_name: developing ${PWD}
+start_directory: ${PWD}
+windows:
+  - window_name: dev
+    focus: True
+    layout: main-horizontal
+    panes:
+      - shell_command:
+        - nvim
+        focus: True
+      - pane
+      - pane
+    options:
+      main-pane-height: 35
+  - window_name: testing
+    layout: main-horizontal
+    panes:
+      - shell_command:
+        - nvim
+        focus: True
+      - pane
+      - pane
+    options:
+      main-pane-height: 35

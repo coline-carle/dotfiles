@@ -26,6 +26,7 @@ endif
 call plug#begin('~/.vim/bundle')
 
 Plug 'wow-sweetlie/tender.vim', { 'branch': 'sign_column' }
+Plug 'janko-m/vim-test'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'neomake/neomake'
@@ -44,8 +45,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'rizzatti/dash.vim'
 
 call plug#end()
+
+" Dash
+nmap <silent> <leader>d <Plug>DashSearch
+
 
 " STRIP whitespace
 autocmd BufEnter * EnableStripWhitespaceOnSave
@@ -55,7 +61,13 @@ let elixir_space_error=1
 " set clipboard
 set clipboard=unnamed
 
-
+" vim test configuration
+let test#strategy = "vimux"
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
 
 " NERDTree configuration
 let NERDTreeDirArrows=1
@@ -88,6 +100,30 @@ let g:neomake_warning_sign={'text': 'W', 'texthl': 'WarningMsg'}
 let g:neomake_error_sign  ={'text': 'E', 'texthl': 'ErrorMsg'}
 let g:neomake_info_sign = {'text': 'ℹ', 'texthl': 'InfoMsg'}
 
+
+" dirty patch
+" function s:elixir_ft_setting()
+"     let g:neomake_open_list = 2
+"     " TODO Find a way to just use this from vim-elixir plugin
+"     let mix_test_efm =   '%E  %n) %m,'
+"     let mix_test_efm .=  '%+G     ** %m,'
+"     let mix_test_efm .=  '%+G     stacktrace:,'
+"     let mix_test_efm .=  '%C     %f:%l,'
+"     let mix_test_efm .=  '%+G       (%\\w%\\+) %f:%l: %m,'
+"     let mix_test_efm .=  '%+G       %f:%l: %.%#,'
+"     let mix_test_efm .=  '** (%\\w%\\+) %f:%l: %m'
+"     let g:neomake_elixir_mixtest_maker = {
+"         \ 'exe': 'mix',
+"         \ 'args': ['test'],
+"         \ 'append_file': 0,
+"         \ 'errorformat': mix_test_efm
+"         \ }
+" endfunction
+"
+"
+" augroup elixir
+"     autocmd FileType elixir call s:elixir_ft_setting()
+" augroup END
 
 " ctrlp nearest git -> current dir
 let g:ctrlp_working_path_mode = 'ra'

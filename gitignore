@@ -28,3 +28,8 @@ Thumbs.db
 *.sql
 *.sqlite
 *.sqlite-journal
+
+# dotenv file
+.env
+# rg file
+.ignore

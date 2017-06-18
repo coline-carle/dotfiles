@@ -26,6 +26,8 @@ endif
 call plug#begin('~/.vim/bundle')
 
 Plug 'wow-sweetlie/tender.vim', { 'branch': 'sign_column' }
+Plug 'gorkunov/smartpairs.vim'
+Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
@@ -40,12 +42,12 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ervandew/supertab'
 Plug 'sheerun/vim-polyglot'
 Plug 'benmills/vimux'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'rizzatti/dash.vim'
+Plug 'nathanaelkane/vim-indent-guides'
 
 call plug#end()
 
@@ -60,6 +62,13 @@ let elixir_space_error=1
 
 " set clipboard
 set clipboard=unnamed
+
+" neovim with virtualenv
+let g:python3_host_prog="/usr/local/bin/python3"
+
+" indent guide
+hi IndentGuidesOdd  ctermbg=black
+hi IndentGuidesEven ctermbg=darkgrey
 
 " vim test configuration
 let test#strategy = "vimux"
@@ -79,9 +88,18 @@ let g:NERDTreeWinSize = 50
 nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <silent><leader>f :NERDTreeFind<cr>
 
+"config fzf.vim
+
+" Mapping selecting mappings
+map <leader>b :Buffers<cr>
+map <leader>f :Files<cr>
+map <leader>g :GFiles<cr>
+
 
 let g:rg_command = '
-  \ rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" '
+    \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
+    \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst}"
+    \ -g "!{.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,_build,deps,db,*.ez}/*" '
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(

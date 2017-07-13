@@ -13,6 +13,7 @@
 [alias]
   amend = commit --amend
   ca = !git add --all && git commit --all --verbose
+  aa = add -all
   graph = log --graph --oneline --decorate
   l = log --format='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --no-merges -n 30 --abbrev-commit --date=relative
   st = status --short
@@ -20,3 +21,5 @@
   branches = branch -vv --all
 
 
+[github]
+	user = wow-sweetlie

@@ -25,13 +25,16 @@ endif
 
 call plug#begin('~/.vim/bundle')
 
-Plug 'wow-sweetlie/tender.vim', { 'branch': 'sign_column' }
+Plug 'vim-airline/vim-airline-themes'
+Plug 'mattn/gist-vim'
+Plug 'mattn/webapi-vim'
+Plug 'chriskempson/base16-vim'
 Plug 'gorkunov/smartpairs.vim'
 Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
-Plug 'neomake/neomake'
+Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'elixir-lang/vim-elixir'
@@ -48,8 +51,13 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'rizzatti/dash.vim'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'fatih/vim-go'
+Plug 'ElmCast/elm-vim'
 
 call plug#end()
+
+" Use Bash
+set shell=/bin/bash
 
 " Dash
 nmap <silent> <leader>d <Plug>DashSearch
@@ -66,9 +74,26 @@ set clipboard=unnamed
 " neovim with virtualenv
 let g:python3_host_prog="/usr/local/bin/python3"
 
+" ALE
+let g:ale_linters = {
+\   'go': ['gometalinter'],
+\   'javascript': ['xo']
+\}
+nmap <silent> <C-:> <Plug>(ale_next_wrap)
+nmap <silent> <C-;> <Plug>(ale_previous_wrap)
+
+" go lang
+autocmd FileType go nmap <leader>v  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+
+
 " indent guide
 hi IndentGuidesOdd  ctermbg=black
 hi IndentGuidesEven ctermbg=darkgrey
+
+" xml
+let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax
 
 " vim test configuration
 let test#strategy = "vimux"
@@ -99,7 +124,7 @@ map <leader>g :GFiles<cr>
 let g:rg_command = '
     \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
     \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst}"
-    \ -g "!{.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,_build,deps,db,*.ez}/*" '
+    \ -g "!{.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,_build,deps,db,*.ez, vcr_cassettes}/*" '
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
@@ -112,11 +137,6 @@ nnoremap <C-p> :Rg<CR>
 
 noremap <leader>rr :wa<CR> :VimuxRunLastCommand<CR>
 noremap <leader>rc :wa<CR> :VimuxPromptCommand<CR>
-
-" Neomake
-let g:neomake_warning_sign={'text': 'W', 'texthl': 'WarningMsg'}
-let g:neomake_error_sign  ={'text': 'E', 'texthl': 'ErrorMsg'}
-let g:neomake_info_sign = {'text': 'ℹ', 'texthl': 'InfoMsg'}
 
 
 " dirty patch
@@ -163,12 +183,10 @@ set cursorcolumn
 " Set the title of the iterm tab
 set title
 
-colorscheme tender
-let g:airline_theme = 'tender'
+colorscheme base16-chalk
+let g:airline_theme = 'base16_chalk'
 
 let g:deoplete#enable_at_startup = 1
-
-autocmd! BufWritePost * Neomake
 
 filetype plugin indent on
 
@@ -232,3 +250,10 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 
+" antidote 9
+function CallAntidote9()
+  :w
+  call system("open -a /Applications/Antidote\\ 9.app ".bufname("%"))
+endfunction
+
+nmap <silent> <C-B> :call CallAntidote9()<CR>

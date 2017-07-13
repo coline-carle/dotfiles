@@ -33,3 +33,6 @@ Thumbs.db
 .env
 # rg file
 .ignore
+
+# node js
+node_modules

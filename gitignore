@@ -28,6 +28,8 @@ Thumbs.db
 *.sql
 *.sqlite
 *.sqlite-journal
+*.db
+*.db.lock
 
 # dotenv file
 .env

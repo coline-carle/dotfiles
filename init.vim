@@ -76,11 +76,20 @@ let g:python3_host_prog="/usr/local/bin/python3"
 
 " ALE
 let g:ale_linters = {
-\   'go': ['gometalinter'],
 \   'javascript': ['xo']
 \}
-nmap <silent> <C-:> <Plug>(ale_next_wrap)
-nmap <silent> <C-;> <Plug>(ale_previous_wrap)
+
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '•'
+
+highlight! link ALEWarningSign DiffAdd
+highlight! link ALEErrorSign DiffDelete
+
+nmap <silent> <leader>, <Plug>(ale_next_wrap)
+nmap <silent> <leader>; <Plug>(ale_previous_wrap)
+
+" gometalinter is too slow
+let g:ale_go_gometalinter_options = '-fast'
 
 " go lang
 autocmd FileType go nmap <leader>v  <Plug>(go-build)
@@ -207,6 +216,12 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
 augroup END
 
+augroup  golang
+  au!
+
+  au Filetype go setlocal listchars+=tab:\ \ " tricky comment for last space
+ augroup END
+
 " When the type of shell script is /bin/sh, assume a POSIX-compatible
 " shell for syntax highlighting purposes.
 let g:is_posix = 1
@@ -218,7 +233,7 @@ set shiftround
 set expandtab
 
 " Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:¬
+set list listchars=tab:▸\ ,trail:·,precedes:←,extends:→
 
 " Use one space, not two, after punctuation.
 set nojoinspaces
@@ -251,9 +266,11 @@ nnoremap <C-l> <C-w>l
 
 
 " antidote 9
-function CallAntidote9()
-  :w
-  call system("open -a /Applications/Antidote\\ 9.app ".bufname("%"))
-endfunction
+if !exists('*CallAntidote9')
+  function CallAntidote9()
+    :w
+    call system("open -a /Applications/Antidote\\ 9.app ".bufname("%"))
+  endfunction
+endif
 
 nmap <silent> <C-B> :call CallAntidote9()<CR>

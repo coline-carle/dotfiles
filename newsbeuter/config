@@ -1,0 +1,21 @@
+color info black green bold
+color listfocus black green bold
+color listfocus_unread black green bold
+
+always-display-description true
+
+show-read-articles no
+show-read-feeds no
+
+auto-reload yes
+reload-time 5
+reload-threads 32
+
+bind-key j next
+bind-key k prev
+bind-key J next-feed
+bind-key K prev-feed
+bind-key j down article
+bind-key k up article
+bind-key J next article
+bind-key K prev article

@@ -30,8 +30,6 @@ Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
 Plug 'chriskempson/base16-vim'
 Plug 'gorkunov/smartpairs.vim'
-Plug 'majutsushi/tagbar'
-Plug 'janko-m/vim-test'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'w0rp/ale'
@@ -45,17 +43,13 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ervandew/supertab'
 Plug 'sheerun/vim-polyglot'
 Plug 'benmills/vimux'
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'rizzatti/dash.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'fatih/vim-go'
 Plug 'ElmCast/elm-vim'
 Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
-Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'saltstack/salt-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
@@ -65,26 +59,11 @@ call plug#end()
 " Use Bash
 set shell=/bin/bash
 
-" Dash
-nmap <silent> <leader>d <Plug>DashSearch
-
-
-" STRIP whitespace
-autocmd BufEnter * EnableStripWhitespaceOnSave
-let c_space_error=1
-let elixir_space_error=1
-
 " set clipboard
 set clipboard=unnamed
 
-" neovim with virtualenv
-let g:python3_host_prog="/usr/local/bin/python3"
 
 " ALE
-let g:ale_linters = {
-\   'javascript': ['xo']
-\}
-
 let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '•'
 
@@ -110,14 +89,6 @@ hi IndentGuidesEven ctermbg=darkgrey
 let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
 
-" vim test configuration
-let test#strategy = "vimux"
-nmap <silent> <leader>t :TestNearest<CR>
-nmap <silent> <leader>T :TestFile<CR>
-nmap <silent> <leader>a :TestSuite<CR>
-nmap <silent> <leader>l :TestLast<CR>
-nmap <silent> <leader>g :TestVisit<CR>
-
 " NERDTree configuration
 let NERDTreeDirArrows=1
 let g:NERDTreeDirArrowExpandable = '▸'
@@ -127,56 +98,6 @@ let g:NERDTreeWinSize = 50
 " Nerd tree
 nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <silent><leader>f :NERDTreeFind<cr>
-
-"config fzf.vim
-
-" Mapping selecting mappings
-map <leader>b :Buffers<cr>
-map <leader>f :Files<cr>
-map <leader>g :GFiles<cr>
-
-
-let g:rg_command = '
-    \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-    \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst}"
-    \ -g "!{.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,_build,deps,db,*.ez, vcr_cassettes}/*" '
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   g:rg_command .shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-nnoremap <C-p> :Rg<CR>
-
-noremap <leader>rr :wa<CR> :VimuxRunLastCommand<CR>
-noremap <leader>rc :wa<CR> :VimuxPromptCommand<CR>
-
-
-" dirty patch
-" function s:elixir_ft_setting()
-"     let g:neomake_open_list = 2
-"     " TODO Find a way to just use this from vim-elixir plugin
-"     let mix_test_efm =   '%E  %n) %m,'
-"     let mix_test_efm .=  '%+G     ** %m,'
-"     let mix_test_efm .=  '%+G     stacktrace:,'
-"     let mix_test_efm .=  '%C     %f:%l,'
-"     let mix_test_efm .=  '%+G       (%\\w%\\+) %f:%l: %m,'
-"     let mix_test_efm .=  '%+G       %f:%l: %.%#,'
-"     let mix_test_efm .=  '** (%\\w%\\+) %f:%l: %m'
-"     let g:neomake_elixir_mixtest_maker = {
-"         \ 'exe': 'mix',
-"         \ 'args': ['test'],
-"         \ 'append_file': 0,
-"         \ 'errorformat': mix_test_efm
-"         \ }
-" endfunction
-"
-"
-" augroup elixir
-"     autocmd FileType elixir call s:elixir_ft_setting()
-" augroup END
 
 " ctrlp nearest git -> current dir
 let g:ctrlp_working_path_mode = 'ra'
@@ -193,7 +114,6 @@ map <CR> :noh<CR>
 " highlight cursor position
 set cursorline
 set cursorcolumn
-
 
 " Set the title of the iterm tab
 set title
@@ -269,14 +189,3 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
-
-
-" antidote 9
-if !exists('*CallAntidote9')
-  function CallAntidote9()
-    :w
-    call system("open -a /Applications/Antidote\\ 9.app ".bufname("%"))
-  endfunction
-endif
-
-nmap <silent> <C-B> :call CallAntidote9()<CR>

@@ -2,6 +2,8 @@ color info black green bold
 color listfocus black green bold
 color listfocus_unread black green bold
 
+browser open
+
 always-display-description true
 
 show-read-articles no

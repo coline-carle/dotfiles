@@ -33,6 +33,10 @@ Thumbs.db
 
 # dotenv file
 .env
+
+# phoenix secrets
+*.secret.exs
+
 # rg file
 .ignore
 

@@ -19,6 +19,7 @@
   st = status --short
   remotes = remote --verbose
   branches = branch -vv --all
+  root = rev-parse --show-toplevel
 
 
 [github]

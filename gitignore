@@ -30,6 +30,14 @@ Thumbs.db
 *.sqlite-journal
 *.db
 *.db.lock
+*.sqlite
+
+# python files
+*.pyc
+
+# virtualfish dirs
+.tool-versions
+.tool-versions-e
 
 # dotenv file
 .env

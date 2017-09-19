@@ -59,6 +59,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'saltstack/salt-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'powerman/vim-plugin-AnsiEsc'
 
 call plug#end()
 
@@ -82,7 +83,7 @@ let g:python3_host_prog="/usr/local/bin/python3"
 
 " ALE
 let g:ale_linters = {
-\   'javascript': ['xo']
+\
 \}
 
 let g:ale_sign_error = '✗'
@@ -138,7 +139,7 @@ map <leader>g :GFiles<cr>
 
 let g:rg_command = '
     \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-    \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst}"
+    \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst,sls,yml}"
     \ -g "!{.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,_build,deps,db,*.ez, vcr_cassettes}/*" '
 
 command! -bang -nargs=* Rg
@@ -280,3 +281,10 @@ if !exists('*CallAntidote9')
 endif
 
 nmap <silent> <C-B> :call CallAntidote9()<CR>
+
+" elixir mapping
+" Vim-Alchemist Mappings
+autocmd FileType elixir nnoremap <buffer> <leader>h :call alchemist#exdoc()<CR>
+autocmd FileType elixir nnoremap <buffer> <leader>d :call alchemist#exdef()<CR>
+
+" let test#elixir#exunit#executable ='./test.sh'

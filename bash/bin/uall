@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Upgrade vimrc.
+function vimupg () {
+  if ! [[ -e $HOME/.local/share/nvim/site/autoload/plug.vim ]]; then
+    echo 'vim-plug is not installed.'
+    return 1
+  fi
+
+  nvim -c PlugUpgrade -c qall
+  nvim -c PlugUpdate -c qall
+  nvim -c PlugInstall -c qall
+  nvim -c PlugClean! -c qall
+}
+
+# homebrew
+function brewup () {
+  brew update
+  brew upgrade
+  brew doctor
+  brew cleanup
+}
+
+# gproxy start > /dev/null
+brewup
+# vimupg
+# gproxy stop

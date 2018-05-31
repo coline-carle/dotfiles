@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+PID_FILE=/tmp/gproxy.pid
+PROXY_SERVER=proxy-server
+
+function pid() {
+    echo $(cat $PID_FILE)
+}
+
+function gproxy_start() {
+  if [[ -f "$PID_FILE" ]]; then
+    printf "gproxy already started (PID_FILE present)\n"
+    exit 1
+  fi
+
+  ssh -D 8080 -C2qTnN $PROXY_SERVER &
+  echo $! > $PID_FILE
+}
+
+function gproxy_status() {
+  if [[ -f "$PID_FILE" ]]; then
+    printf "gproxy is active\n"
+    printf "pid:\n%s\n" $(pid)
+  else
+    printf "gproxy is not active\n"
+  fi
+}
+
+function gproxy_stop() {
+  if [[ -f "$PID_FILE" ]]; then
+    kill -9 $(pid)
+    rm -f $PID_FILE
+  else
+    printf "gproxy is not active\n"
+    exit 1
+  fi
+}
+
+
+if [[ "${1}" == "start" ]]; then
+  gproxy_start
+elif [[ "${1}" == "status" ]]; then
+  gproxy_status
+elif [[ "${1}" == "stop" ]]; then
+  gproxy_stop
+else
+  printf "usage: gproxy start\n"
+  printf "       gproxy status\n"
+  printf "       gproxy stop\n"
+fi

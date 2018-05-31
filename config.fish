@@ -7,8 +7,10 @@ if status --is-interactive
     eval sh $HOME/.config/base16-shell/scripts/base16-chalk.sh
 end
 set -g fish_user_paths "/usr/local/sbin" $fish_user_paths
-set -g ERL_AFLAGS "-kernel shell_history enabled"
-eval (/usr/local/bin/python2 -m virtualfish)
+set -gx ERL_AFLAGS "-kernel shell_history enabled"
+set -gx WORKON_HOME "$HOME/.envs"
+
+eval (/usr/local/bin/python2 -m virtualfish auto_activation global_requirements)
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`

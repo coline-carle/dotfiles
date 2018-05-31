@@ -12,23 +12,33 @@ set incsearch     " do incremental searching
 set laststatus=2  " Always display the status line
 set autowrite     " Automatically :write before running commands
 
-if (has("termguicolors"))
- set termguicolors
-end
+set t_Co=256
+set termguicolors
 
-
-" Switch syntax highlighting on, when the terminal has colors
-" Also switch on highlighting the last used search pattern.
-if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-  syntax on
-endif
+syntax on
 
 call plug#begin('~/.vim/bundle')
 
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'pbogut/deoplete-elm'
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 Plug 'vim-airline/vim-airline-themes'
+Plug 'jparise/vim-graphql'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'Quramy/vim-js-pretty-template'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'sbdchd/neoformat'
 Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
-Plug 'chriskempson/base16-vim'
+Plug 'dracula/vim'
+Plug 'Alvarocz/vim-northpole'
 Plug 'gorkunov/smartpairs.vim'
 Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
@@ -37,10 +47,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'elixir-lang/vim-elixir'
+Plug 'elixir-editors/vim-elixir'
 Plug 'tpope/vim-endwise'
 Plug 'slashmili/alchemist.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ervandew/supertab'
 Plug 'sheerun/vim-polyglot'
@@ -81,9 +90,11 @@ set clipboard=unnamed
 " neovim with virtualenv
 let g:python3_host_prog="/usr/local/bin/python3"
 
+let g:elm_format_autosave = 0
+
 " ALE
 let g:ale_linters = {
-\
+\ 'javascript': ['eslint'],
 \}
 
 let g:ale_sign_error = '✗'
@@ -140,7 +151,7 @@ map <leader>g :GFiles<cr>
 let g:rg_command = '
     \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
     \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst,sls,yml}"
-    \ -g "!{.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,_build,deps,db,*.ez, vcr_cassettes}/*" '
+    \ -g "!{.git,node_modules,vendor,build,dist,_build,deps,vcr_cassettes}/*" '
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
@@ -192,15 +203,15 @@ map <CR> :noh<CR>
 
 
 " highlight cursor position
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 
 
 " Set the title of the iterm tab
 set title
 
-colorscheme base16-chalk
-let g:airline_theme = 'base16_chalk'
+color dracula
+let g:airline_theme = 'dracula'
 
 let g:deoplete#enable_at_startup = 1
 
@@ -287,4 +298,19 @@ nmap <silent> <C-B> :call CallAntidote9()<CR>
 autocmd FileType elixir nnoremap <buffer> <leader>h :call alchemist#exdoc()<CR>
 autocmd FileType elixir nnoremap <buffer> <leader>d :call alchemist#exdef()<CR>
 
-" let test#elixir#exunit#executable ='./test.sh'
+if has('autocmd')
+  " Support `-` in css property names
+    augroup VimCSS3Syntax
+        autocmd!
+        autocmd FileType css setlocal iskeyword+=-
+    augroup END
+
+    call jspretmpl#register_tag('gql', 'graphql')
+    autocmd FileType javascript.jsx JsPreTmpl html
+    autocmd FileType javascript JsPreTmpl html
+endif
+
+
+augroup filetypedetect
+    au BufRead,BufNewFile *.ksy setfiletype yaml
+augroup END

@@ -1,0 +1,32 @@
+[apply]
+  whitepsace = fix
+
+[core]
+  editor = nvim
+  quotepath = false
+  excludesfile = ~/.dotfiles/gitignore
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+[alias]
+  amend = commit --amend
+  ca = !git add --all && git commit --all --verbose
+  aa = add -all
+  graph = log --graph --oneline --decorate
+  l = log --format='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --no-merges -n 30 --abbrev-commit --date=relative
+  st = status --short
+  remotes = remote --verbose
+  branches = branch -vv --all
+  root = rev-parse --show-toplevel
+
+
+[github]
+	user = coline-carle
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[user]
+	name = Coline Carle
+	email = sweetie@wipeinc.io

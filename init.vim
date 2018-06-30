@@ -13,7 +13,6 @@ set laststatus=2  " Always display the status line
 set autowrite     " Automatically :write before running commands
 
 set t_Co=256
-set termguicolors
 
 syntax on
 
@@ -22,12 +21,14 @@ call plug#begin('~/.vim/bundle')
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'pbogut/deoplete-elm'
+  Plug 'zchee/deoplete-go', { 'do': 'make'}
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
+Plug 'wakatime/vim-wakatime'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'jparise/vim-graphql'
 Plug 'pangloss/vim-javascript'
@@ -37,8 +38,7 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'sbdchd/neoformat'
 Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
-Plug 'dracula/vim'
-Plug 'Alvarocz/vim-northpole'
+Plug 'chriskempson/base16-vim'
 Plug 'gorkunov/smartpairs.vim'
 Plug 'majutsushi/tagbar'
 Plug 'janko-m/vim-test'
@@ -77,6 +77,10 @@ set shell=/bin/bash
 
 " Dash
 nmap <silent> <leader>d <Plug>DashSearch
+" Godoc
+nmap <Leader>k :GoDoc<cr>
+nmap <leader>g :GoDef<cr>
+nmap <leader>r :GoRename<cr>
 
 
 " STRIP whitespace
@@ -102,6 +106,8 @@ let g:ale_sign_warning = '•'
 
 highlight! link ALEWarningSign DiffAdd
 highlight! link ALEErrorSign DiffDelete
+highlight! link ALEError Error
+highlight! link ALEWarning IncSearch
 
 nmap <silent> <leader>, <Plug>(ale_next_wrap)
 nmap <silent> <leader>; <Plug>(ale_previous_wrap)
@@ -112,6 +118,9 @@ let g:ale_go_gometalinter_options = '-fast'
 " go lang
 autocmd FileType go nmap <leader>v  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
+
+" airline
+let g:airline#extensions#ale#enabled = 1
 
 
 " indent guide
@@ -124,11 +133,11 @@ au FileType xml setlocal foldmethod=syntax
 
 " vim test configuration
 let test#strategy = "vimux"
-nmap <silent> <leader>t :TestNearest<CR>
-nmap <silent> <leader>T :TestFile<CR>
-nmap <silent> <leader>a :TestSuite<CR>
-nmap <silent> <leader>l :TestLast<CR>
-nmap <silent> <leader>g :TestVisit<CR>
+" nmap <silent> <leader>t :TestNearest<CR>
+" nmap <silent> <leader>T :TestFile<CR>
+" nmap <silent> <leader>a :TestSuite<CR>
+" nmap <silent> <leader>l :TestLast<CR>
+" nmap <silent> <leader>g :TestVisit<CR>
 
 " NERDTree configuration
 let NERDTreeDirArrows=1
@@ -145,12 +154,12 @@ nnoremap <silent><leader>f :NERDTreeFind<cr>
 " Mapping selecting mappings
 map <leader>b :Buffers<cr>
 map <leader>f :Files<cr>
-map <leader>g :GFiles<cr>
+map <leader>G :GFiles<cr>
 
 
 let g:rg_command = '
     \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-    \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst,sls,yml}"
+    \ -g "*.{js,json,php,md,ex,exs,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst,sls,yml,sql}"
     \ -g "!{.git,node_modules,vendor,build,dist,_build,deps,vcr_cassettes}/*" '
 
 command! -bang -nargs=* Rg
@@ -210,8 +219,10 @@ map <CR> :noh<CR>
 " Set the title of the iterm tab
 set title
 
-color dracula
-let g:airline_theme = 'dracula'
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+end
 
 let g:deoplete#enable_at_startup = 1
 
@@ -239,6 +250,11 @@ augroup  golang
 
   au Filetype go setlocal listchars+=tab:\ \ " tricky comment for last space
  augroup END
+
+" golang
+let g:go_auto_sameids = 1
+let g:go_fmt_command = "goimports"
+au FileType go nmap <leader>gt :GoDeclsDir<cr>
 
 " When the type of shell script is /bin/sh, assume a POSIX-compatible
 " shell for syntax highlighting purposes.

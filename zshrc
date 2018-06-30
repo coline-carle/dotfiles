@@ -3,7 +3,7 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 
 # go lang
-export GOPATH=$HOME/golang
+export GOPATH=$HOME/go
 export GOROOT=/usr/local/opt/go/libexec
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
@@ -47,6 +47,12 @@ zplug "johnhamelink/env-zsh", as:plugin
 zplug load
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 
 # my bash scripts
@@ -58,10 +64,6 @@ export PATH=$HOME/bin:$PATH
 
 . $HOME/.secrets
 
-#Neovim true color support
-export NVIM_TUI_ENABLE_TRUE_COLOR=1
-#Neovim cursor shape support
-export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 alias go-postgres="docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres:10.1-alpine"
 

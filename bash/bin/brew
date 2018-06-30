@@ -1,0 +1,8 @@
+#!/bin/sh
+# check if pyenv is available
+# edit: fixed redirect issue in earlier version
+if which asdf > /dev/null 2>&1; then
+  /usr/bin/env PATH="${PATH//$HOME\/\.asdf\/shims:/}" /usr/local/bin/brew "$@"
+else
+  /usr/local/bin/brew "$@"
+fi
